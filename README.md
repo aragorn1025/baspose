@@ -17,6 +17,7 @@
 
 ## Structure of Directory
     $ - bashpost
+    $    |- app   # android app
     $    |- db    # databse
 
 * * *
