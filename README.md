@@ -16,8 +16,9 @@
 * * *
 
 ## Structure of Directory
-    $ - bashpost
-    $    |- app   # android app
-    $    |- db    # databse
-
+    - bashpost
+       |- app             # android app
+       |- db              # databse
+       |- src             # source codes
+           |- deprecated  # deprecated codes for old or validating ones
 * * *
