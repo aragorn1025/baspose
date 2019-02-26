@@ -1,24 +1,24 @@
-# BasPost
+# BasPose
 
 * * *
 
 ## Table of Contents
-- [BasPost](#baspost)
+- [BasPose](#baspose)
   * [Table of Contents](#table-of-contents)
   * [Structure of Directory](#structure-of-directory)
 
 * * *
 
 ## Installation
-    $ git clone https://github.com/aragorn1025/baspost.git
-    $ cd baspost
+    $ git clone https://github.com/aragorn1025/baspose.git
+    $ cd baspose
 
 * * *
 
 ## Structure of Directory
-    - bashpost
+    - bashpose
        |- app             # android app
        |- db              # databse
        |- src             # source codes
-           |- deprecated  # deprecated codes for old or validating ones
+           |- deprecated  # deprecated codes for useless ones
 * * *
