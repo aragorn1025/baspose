@@ -1,4 +1,4 @@
-package com.example.tingwang.baspost;
+package com.ehappy.baspost_01;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.tingwang.baspost", appContext.getPackageName());
+        assertEquals("com.ehappy.baspost_01", appContext.getPackageName());
     }
 }

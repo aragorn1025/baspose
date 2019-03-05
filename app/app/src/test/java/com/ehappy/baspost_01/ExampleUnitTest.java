@@ -1,4 +1,4 @@
-package com.example.tingwang.baspost;
+package com.ehappy.baspost_01;
 
 import org.junit.Test;
 
