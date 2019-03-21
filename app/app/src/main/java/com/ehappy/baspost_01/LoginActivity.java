@@ -3,6 +3,7 @@ package com.ehappy.baspost_01;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -30,9 +32,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText username,password;
     private Button btLogin;
-    private ProgressBar loading;
+    public ProgressBar loading;
     private TextView forgot,register;
-    private static String URL_Login = "http://10.96.21.231/login2018.php";
+    //private static String URL_Login = "http://10.96.21.231/login2018.php";
+    private static String URL_Login = "http://192.168.1.162:8888//login2018.php";
+    SessionManager sessionManager;
 
 
     @Override
@@ -40,12 +44,14 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        sessionManager = new SessionManager(this);
 
         username = findViewById(R.id.etUsername);
         password = findViewById(R.id.etPassword);
         forgot = findViewById(R.id.etForgot);
         register = findViewById(R.id.etRegister);
         btLogin = findViewById(R.id.btLogin);
+        loading = findViewById(R.id.loading);
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,6 +71,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 if(!musername.isEmpty() || !mpassword.isEmpty())
                 {
+                    //Log.e("ok","non empty");
                     Login(musername,mpassword);
                 }
                 else
@@ -94,19 +101,38 @@ public class LoginActivity extends AppCompatActivity {
                         try{
 
                             JSONObject jsonObject = new JSONObject(response);
-                            String success = jsonObject.getString("success");
+
+                            Log.e("login","before success");
+
+                            String success = jsonObject.optString("success");
+
+                            Log.e("login","before login");
                             JSONArray jsonArray = jsonObject.getJSONArray("login");
+
+                            Log.e("login","before equals");
 
                             if(success.equals("1"))
                             {
+
+                                Log.e("login","success!");
                                 for(int i=0; i<jsonArray.length(); i++)
                                 {
                                     JSONObject object = jsonArray.getJSONObject(i);
 
-                                    String nickname = object.getString("nickname").trim();
-                                    String username = object.getString("username").trim();
+                                    String nickname = object.optString("nickname").trim();
+                                    String email = object.optString("email").trim();
+                                    String id = object.getString("id").trim();
 
-                                    Toast.makeText(LoginActivity.this,"Success Login. \nYour nickname : "+nickname+"\nYour username : "+username,Toast.LENGTH_SHORT).show();
+                                    sessionManager.createSession(nickname, email, id);
+
+                                    //Toast.makeText(LoginActivity.this,"Success Login. \nYour nickname : "+nickname+"\nYour username : "+username,Toast.LENGTH_SHORT).show();
+
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    intent.putExtra("nickname", nickname);
+                                    intent.putExtra("email", email);
+                                    startActivity(intent);
+                                    finish();
+
 
                                     loading.setVisibility(View.GONE);
 
@@ -147,6 +173,16 @@ public class LoginActivity extends AppCompatActivity {
         };
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+
+
+//        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+//                60000,
+//                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+
+
         requestQueue.add(stringRequest);
     }
 

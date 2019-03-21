@@ -7,7 +7,8 @@ public class AppConfig {
 
     //domain name , ip address
     //public static String BASE_URL = "http://127.0.0.1:8888/";
-    public static String BASE_URL = "http://192.168.0.135:8888/";
+    //public static String BASE_URL = "http://192.168.1.162:8888/";
+    public static String BASE_URL = "http://140.115.51.181:40130/";
 
     public static Retrofit getRetrofit() {
 

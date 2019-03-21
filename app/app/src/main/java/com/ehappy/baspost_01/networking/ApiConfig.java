@@ -16,7 +16,7 @@ import retrofit2.http.PartMap;
 public interface ApiConfig {
 
     @Multipart
-    @POST("videos/video.php")
+    @POST("videoR.php")
     Call<ServerResponse> upload(
             @Header("Authorization") String authorization,
             @PartMap Map<String, RequestBody> map

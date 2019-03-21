@@ -1,5 +1,6 @@
 package com.ehappy.baspost_01;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
@@ -27,8 +28,8 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText username,password,email,nickname;
     private Button btnRegister;
     private ProgressBar loading;
-    private static String REGISTER_REQUEST_URL = "http://10.96.21.231/register2018.php";
-
+    //private static String REGISTER_REQUEST_URL = "http://10.96.21.231/register2018.php";
+    private static String REGISTER_REQUEST_URL ="http://192.168.1.162:8888/register2018.php";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +76,10 @@ public class RegisterActivity extends AppCompatActivity {
 
                             if(success.equals("1")){
                                 Toast.makeText(RegisterActivity.this,"Register Success!",Toast.LENGTH_SHORT).show();
+                                loading.setVisibility(View.GONE);
+
+                                Intent loginIntent = new Intent(RegisterActivity.this,LoginActivity.class);
+                                RegisterActivity.this.startActivity(loginIntent);
 
                             }
 

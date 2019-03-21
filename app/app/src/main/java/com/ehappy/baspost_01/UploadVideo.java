@@ -180,7 +180,7 @@ public class UploadVideo extends AppCompatActivity {
                     //videoPath = getPath(video,null);
 
 
-                    Log.e("error",video.toString());
+                    //Log.e("error",video.toString());
 
                     Toast.makeText(UploadVideo.this,videoPath,Toast.LENGTH_LONG).show();
 
