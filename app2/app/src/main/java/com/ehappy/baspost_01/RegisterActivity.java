@@ -1,80 +1,126 @@
 package com.ehappy.baspost_01;
 
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
 
+    public static final String KEY_USERNAME = "username";
+    public static final String KEY_PASSWORD = "password";
+    public static final String KEY_EMAIL = "email";
+    public static final String KEY_NICKNAME = "nickname";
+
+    private EditText editTextUsername,editTextPassword,editTextEmail,editTextnickname;
+    private Button btnRegister,loginbt;
+    private ProgressBar loading;
+    //private static String REGISTER_REQUEST_URL = "http://10.96.21.231/register2018.php";
+    //private static String REGISTER_REQUEST_URL ="http://192.168.1.162:8888/register2018.php";
+    private static String REGISTER_REQUEST_URL ="http://140.115.51.181:40130/registerV2.php";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        final EditText etAccount = (EditText) findViewById(R.id.etAccount);
-        final EditText etPassword = (EditText) findViewById(R.id.etPassword);
-        final EditText etUserName = (EditText) findViewById(R.id.etUserName);
-        final EditText etEmail = (EditText) findViewById(R.id.etEmail);
-        final RadioButton btboy = (RadioButton) findViewById(R.id.btboy);
-        final RadioButton btgirl = (RadioButton) findViewById(R.id.btgirl);
-        final Button btRegister = (Button) findViewById(R.id.btRegister);
+        editTextUsername = findViewById(R.id.etUsername);
+        editTextPassword = findViewById(R.id.etPassword);
+        editTextnickname = findViewById(R.id.etNickname);
+        editTextEmail = findViewById(R.id.etEmail);
+        btnRegister = findViewById(R.id.btRegister);
+        loginbt = findViewById(R.id.loginbt);
+        loading = findViewById(R.id.loading);
 
         // Listening to Login Screen link
-        btRegister.setOnClickListener(new View.OnClickListener() {
+        btnRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-            public void onClick(View arg0) {
+                Regist();
+            }
 
-                final String account = etAccount.getText().toString();
-                final String username = etUserName.getText().toString();
-                final String email = etEmail.getText().toString();
-                final String password = etPassword.getText().toString();
+        });
 
-                Response.Listener<String> responseListener = new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject jsonResponse = new JSONObject(response);
-                            boolean success = jsonResponse.getBoolean("success");
-                            if (success) {
-                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                                RegisterActivity.this.startActivity(intent);
-                            } else {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-                                builder.setMessage("Register Failed")
-                                        .setNegativeButton("Retry", null)
-                                        .create()
-                                        .show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                };
-
-                RegisterRequest registerRequest = new RegisterRequest(account, username, email, password, responseListener);
-                RequestQueue queue = Volley.newRequestQueue(RegisterActivity.this);
-                queue.add(registerRequest);
-
-
-
-
-
-
+        loginbt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeToLogin();
             }
         });
 
-
     }
+
+
+        private void Regist() {
+
+            loading.setVisibility(View.VISIBLE);
+            btnRegister.setVisibility(View.GONE);
+
+            final String username = editTextUsername.getText().toString().trim();
+            final String password = editTextPassword.getText().toString().trim();
+            final String email = editTextEmail.getText().toString().trim();
+            final String nickname = editTextnickname.getText().toString().trim();
+
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, REGISTER_REQUEST_URL,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            loading.setVisibility(View.GONE);
+                            Toast.makeText(RegisterActivity.this,response,Toast.LENGTH_LONG).show();
+
+                            changeToLogin();
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(RegisterActivity.this,error.toString(),Toast.LENGTH_LONG).show();
+                            loading.setVisibility(View.GONE);
+                            btnRegister.setVisibility(View.VISIBLE);
+                        }
+                    }){
+                @Override
+                protected Map<String,String> getParams(){
+                    Map<String,String> params = new HashMap<String, String>();
+                    params.put(KEY_USERNAME,username);
+                    params.put(KEY_PASSWORD,password);
+                    params.put(KEY_EMAIL, email);
+                    params.put(KEY_NICKNAME, nickname);
+                    return params;
+                }
+
+            };
+
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            requestQueue.add(stringRequest);
+
+        }
+
+
+        private void changeToLogin(){
+            Intent loginIntent = new Intent(RegisterActivity.this,Login2Activity.class);
+            RegisterActivity.this.startActivity(loginIntent);
+
+        }
+
 }
+
