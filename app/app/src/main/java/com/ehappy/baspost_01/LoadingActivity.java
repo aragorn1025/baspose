@@ -22,7 +22,7 @@ public class LoadingActivity extends AppCompatActivity {
                 case GOTO_MAIN_ACTIVITY:
                     Intent intent = new Intent();
                     //將原本Activity的換成別的Activity
-                    intent.setClass(LoadingActivity.this, MainActivity.class);
+                    intent.setClass(LoadingActivity.this, Login2Activity.class);
                     startActivity(intent);
                     finish();
                     break;

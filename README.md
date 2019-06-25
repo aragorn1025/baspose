@@ -19,6 +19,6 @@
     - bashpose
        |- app             # android app
        |- db              # databse
-       |- src             # source codes
-           |- deprecated  # deprecated codes for useless ones
+       |- php             # source codes in lamp
+       |- src             # source codes in python
 * * *

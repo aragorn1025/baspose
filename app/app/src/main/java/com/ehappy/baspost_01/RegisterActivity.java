@@ -19,27 +19,35 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private EditText username,password,email,nickname;
-    private Button btnRegister;
+    public static final String KEY_USERNAME = "username";
+    public static final String KEY_PASSWORD = "password";
+    public static final String KEY_EMAIL = "email";
+    public static final String KEY_NICKNAME = "nickname";
+
+    private EditText editTextUsername,editTextPassword,editTextEmail,editTextnickname;
+    private Button btnRegister,loginbt;
     private ProgressBar loading;
     //private static String REGISTER_REQUEST_URL = "http://10.96.21.231/register2018.php";
-    private static String REGISTER_REQUEST_URL ="http://192.168.1.162:8888/register2018.php";
+    //private static String REGISTER_REQUEST_URL ="http://192.168.1.162:8888/register2018.php";
+    private static String REGISTER_REQUEST_URL ="http://140.115.51.181:40130/registerV2.php";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        username = findViewById(R.id.etUsername);
-        password = findViewById(R.id.etPassword);
-        nickname = findViewById(R.id.etNickname);
-        email = findViewById(R.id.etEmail);
+        editTextUsername = findViewById(R.id.etUsername);
+        editTextPassword = findViewById(R.id.etPassword);
+        editTextnickname = findViewById(R.id.etNickname);
+        editTextEmail = findViewById(R.id.etEmail);
         btnRegister = findViewById(R.id.btRegister);
+        loginbt = findViewById(R.id.loginbt);
         loading = findViewById(R.id.loading);
 
         // Listening to Login Screen link
@@ -52,6 +60,13 @@ public class RegisterActivity extends AppCompatActivity {
 
         });
 
+        loginbt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeToLogin();
+            }
+        });
+
     }
 
 
@@ -60,71 +75,50 @@ public class RegisterActivity extends AppCompatActivity {
             loading.setVisibility(View.VISIBLE);
             btnRegister.setVisibility(View.GONE);
 
-            final String username = this.username.getText().toString().trim();
-            final String password = this.password.getText().toString().trim();
-            final String nickname = this.nickname.getText().toString().trim();
-            final String email = this.email.getText().toString().trim();
+            final String username = editTextUsername.getText().toString().trim();
+            final String password = editTextPassword.getText().toString().trim();
+            final String email = editTextEmail.getText().toString().trim();
+            final String nickname = editTextnickname.getText().toString().trim();
 
             StringRequest stringRequest = new StringRequest(Request.Method.POST, REGISTER_REQUEST_URL,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-
-                        try{
-                            JSONObject jsonObject = new JSONObject(response);
-                            String success = jsonObject.getString("success");
-
-                            if(success.equals("1")){
-                                Toast.makeText(RegisterActivity.this,"Register Success!",Toast.LENGTH_SHORT).show();
-                                loading.setVisibility(View.GONE);
-
-                                Intent loginIntent = new Intent(RegisterActivity.this,LoginActivity.class);
-                                RegisterActivity.this.startActivity(loginIntent);
-
-                            }
-
-
-                        }catch (JSONException e){
-
-                            e.printStackTrace();
-                            Toast.makeText(RegisterActivity.this,"Register Error! "+e.toString(),Toast.LENGTH_SHORT).show();
                             loading.setVisibility(View.GONE);
-                            btnRegister.setVisibility(View.VISIBLE);
-                        }
+                            Toast.makeText(RegisterActivity.this,response,Toast.LENGTH_LONG).show();
 
-
-
+                            changeToLogin();
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-
-                            Toast.makeText(RegisterActivity.this,"Register Error! "+error.toString(),Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegisterActivity.this,error.toString(),Toast.LENGTH_LONG).show();
                             loading.setVisibility(View.GONE);
                             btnRegister.setVisibility(View.VISIBLE);
-
                         }
-                    })
-
-
-            {
+                    }){
                 @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-
-                    Map<String,String> params = new HashMap<>();
-
-                    params.put("username",username);
-                    params.put("password",password);
-                    params.put("email",email);
-                    params.put("nickname",nickname);
-
+                protected Map<String,String> getParams(){
+                    Map<String,String> params = new HashMap<String, String>();
+                    params.put(KEY_USERNAME,username);
+                    params.put(KEY_PASSWORD,password);
+                    params.put(KEY_EMAIL, email);
+                    params.put(KEY_NICKNAME, nickname);
                     return params;
                 }
+
             };
 
             RequestQueue requestQueue = Volley.newRequestQueue(this);
             requestQueue.add(stringRequest);
+
+        }
+
+
+        private void changeToLogin(){
+            Intent loginIntent = new Intent(RegisterActivity.this,Login2Activity.class);
+            RegisterActivity.this.startActivity(loginIntent);
 
         }
 

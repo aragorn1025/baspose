@@ -42,7 +42,7 @@ public class SessionManager {
     public void checkLogin(){
 
         if (!this.isLogin()){
-            Intent i = new Intent(context, LoginActivity.class);
+            Intent i = new Intent(context, Login2Activity.class);
             context.startActivity(i);
             ((MainActivity) context).finish();
         }
@@ -62,7 +62,7 @@ public class SessionManager {
 
         editor.clear();
         editor.commit();
-        Intent i = new Intent(context, LoginActivity.class);
+        Intent i = new Intent(context, Login2Activity.class);
         context.startActivity(i);
         ((MainActivity) context).finish();
 

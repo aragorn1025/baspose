@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProfileActivity">
+
+    <ImageView
+        android:id="@+id/profile_image"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:src="@mipmap/launch"
+        />
+
+
+    <LinearLayout
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_below="@id/profile_image"
+        android:weightSum="2"
+        android:id="@+id/layout_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:src="@drawable/ic_menu_gallery"
+            android:layout_weight="1"
+            android:layout_width="70dp"
+            android:layout_height="50dp" />
+
+        <EditText
+            android:id="@+id/name"
+            android:hint="Name"
+            android:inputType="textPersonName"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_below="@id/layout_text"
+        android:weightSum="2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:src="@drawable/ic_menu_send"
+            android:layout_weight="1"
+            android:layout_width="70dp"
+            android:layout_height="50dp" />
+
+        <EditText
+            android:id="@+id/email"
+            android:hint="Email"
+            android:inputType="textPersonName"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <Button
+        android:layout_alignParentBottom="true"
+        android:id="@+id/btn_logout"
+        android:layout_marginLeft="150dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="300dp"
+        android:textColor="@android:color/white"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="Logout"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

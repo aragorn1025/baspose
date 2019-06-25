@@ -8,13 +8,17 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
 import android.widget.VideoView;
 
 import com.ehappy.baspost_01.networking.ApiConfig;
@@ -24,14 +28,16 @@ import com.ehappy.baspost_01.networking.ServerResponse;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import android.support.design.widget.NavigationView;
+import android.view.MenuItem;
+import com.andremion.floatingnavigationview.FloatingNavigationView;
 
 
 public class UploadVideo extends AppCompatActivity {
@@ -48,24 +54,69 @@ public class UploadVideo extends AppCompatActivity {
     private int myCurrentPosition = 0;
     private static final String PLAYBACK_TIME = "play_time";
 
+    private FloatingNavigationView mFloatingNavigationView;
+
+    public static String filename;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_upload_video);
+        setContentView(R.layout.upload_nav_main);
 
-        button = findViewById(R.id.choosebt);
-        uploadVideo = findViewById(R.id.correctbt);
-        button.setOnClickListener(new View.OnClickListener() {
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+
+        mFloatingNavigationView = (FloatingNavigationView) findViewById(R.id.floating_navigation_view);
+        mFloatingNavigationView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent pickVideoIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                pickVideoIntent.setType("video/*");
-                startActivityForResult(pickVideoIntent, REQUEST_PICK_VIDEO);
+                mFloatingNavigationView.open();
+            }
+        });
+        mFloatingNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem item) {
+                Snackbar.make((View) mFloatingNavigationView.getParent(), item.getTitle() + " Selected!", Snackbar.LENGTH_SHORT).show();
+
+                switch (item.getItemId()){
+
+                    case R.id.nav_home:
+                        Intent mainIntent = new Intent(UploadVideo.this,MainActivity.class);
+                        UploadVideo.this.startActivity(mainIntent);
+                        break;
+
+                }
+
+                mFloatingNavigationView.close();
+                return true;
             }
         });
 
+//        //for FloatingNavigationView
+//        mFloatingNavigationView = (FloatingNavigationView) findViewById(R.id.floating_navigation_view);
+//        mFloatingNavigationView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                mFloatingNavigationView.open();
+//            }
+//        });
+//        mFloatingNavigationView.setNavigationItemSelectedListener(this);
+
+        //function for choose video and upload video buttons
+        button = findViewById(R.id.choosebt);
+        uploadVideo = findViewById(R.id.correctbt);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent pickVideoIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                pickVideoIntent.setType("video/*");
+                //get the chosen video's path
+                startActivityForResult(pickVideoIntent, REQUEST_PICK_VIDEO);
+            }
+        });
 
         uploadVideo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,21 +131,30 @@ public class UploadVideo extends AppCompatActivity {
             }
         });
 
-
+        //play the chosen video
         mVideoView = findViewById(R.id.videoView);
         //myBufferingTextView
-
         if(savedInstanceState!=null){
             myCurrentPosition = savedInstanceState.getInt(PLAYBACK_TIME);
         }
-
         MediaController controller = new MediaController(this);
         controller.setMediaPlayer(mVideoView);
         mVideoView.setMediaController(controller);
 
+        //initialize the progress bar
         initDialog();
     }
 
+    @Override
+    public void onBackPressed() {
+        if (mFloatingNavigationView.isOpened()) {
+            mFloatingNavigationView.close();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    //for video view
     @Override
     protected void onPause(){
         super.onPause();
@@ -103,7 +163,6 @@ public class UploadVideo extends AppCompatActivity {
             mVideoView.pause();
         }
     }
-
     protected void onStop(){
         super.onStop();
 
@@ -115,55 +174,45 @@ public class UploadVideo extends AppCompatActivity {
 
         outState.putInt(PLAYBACK_TIME,mVideoView.getCurrentPosition());
     }
-
     private void initializePlayer(Uri uri){
 
         //myBufferingTextView.setvisibility
 
         if(uri != null){
-
             mVideoView.setVideoURI(uri);
         }
 
-
         mVideoView.setOnPreparedListener(
-
                 new MediaPlayer.OnPreparedListener() {
                     @Override
                     public void onPrepared(MediaPlayer mp) {
                         //myBufferingTextView.setvisibility
-
                         if(myCurrentPosition >0){
                             mVideoView.seekTo(myCurrentPosition);
-
                         }else{
-
                             mVideoView.seekTo(1);
                         }
-
                         mVideoView.start();
                     }
                 });
 
         mVideoView.setOnCompletionListener(
-
                 new MediaPlayer.OnCompletionListener() {
                     @Override
                     public void onCompletion(MediaPlayer mp) {
-                        Toast.makeText(UploadVideo.this,
-                                "Playback completed",
-                                Toast.LENGTH_LONG).show();
-
+//                        Toast.makeText(UploadVideo.this,
+//                                "Playback completed",
+//                                Toast.LENGTH_LONG).show();
                         mVideoView.seekTo(0);
                     }
                 }
         );
     }
-
     private void releasePlayer(){mVideoView.stopPlayback();}
 
 
 
+    //within on click choose button function
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -172,20 +221,15 @@ public class UploadVideo extends AppCompatActivity {
 
             if (requestCode == REQUEST_PICK_VIDEO) {
                 if (data != null) {
-                    Toast.makeText(this, "Video content URI: " + data.getData(),
-                            Toast.LENGTH_LONG).show();
+//                    Toast.makeText(this, "Video content URI: " + data.getData(),
+//                            Toast.LENGTH_LONG).show();
                     video = data.getData();
-
                     videoPath = getPath(video);
-                    //videoPath = getPath(video,null);
 
+                    System.out.println("videoPath:"+videoPath);
 
-                    //Log.e("error",video.toString());
-
-                    Toast.makeText(UploadVideo.this,videoPath,Toast.LENGTH_LONG).show();
-
+                    //Toast.makeText(UploadVideo.this,videoPath,Toast.LENGTH_LONG).show();
                     initializePlayer(video);
-
                 }
             }
         }
@@ -193,22 +237,6 @@ public class UploadVideo extends AppCompatActivity {
             Toast.makeText(this, "Sorry, there was an error!", Toast.LENGTH_LONG).show();
         }
     }
-
-//    public String getPath(Uri uri){
-//        String[] projection = {MediaStore.Video.Media.DATA};
-//        Cursor cursor = getContentResolver().query(uri,projection,null,null);
-//
-//        if(cursor!=null){
-//
-//            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
-//            cursor.moveToFirst();
-//            return cursor.getString(column_index);
-//        }else
-//        {
-//            return null;
-//        }
-//
-//    }
 
     public String getPath(Uri uri){
         Cursor cursor = getContentResolver().query(uri, null, null, null, null);
@@ -227,10 +255,10 @@ public class UploadVideo extends AppCompatActivity {
         return path;
     }
 
+    //
     private void uploadFile(String videoPath) {
 
-        Toast.makeText(UploadVideo.this,videoPath,Toast.LENGTH_LONG).show();
-
+        //Toast.makeText(UploadVideo.this,videoPath,Toast.LENGTH_LONG).show();
 
         if (video == null || video.equals("")) {
             Toast.makeText(this, "please select a video ", Toast.LENGTH_LONG).show();
@@ -246,6 +274,10 @@ public class UploadVideo extends AppCompatActivity {
             // Parsing any Media type file
             RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), file);
             map.put("file\"; filename=\"" + file.getName() + "\"", requestBody);
+
+            System.out.println("file.getName"+file.getName());
+            filename = file.getName();
+
             ApiConfig getResponse = AppConfig.getRetrofit().create(ApiConfig.class);
             Call<ServerResponse> call = getResponse.upload("token", map);
             call.enqueue(new Callback<ServerResponse>() {
@@ -257,18 +289,28 @@ public class UploadVideo extends AppCompatActivity {
                             ServerResponse serverResponse = response.body();
                             Toast.makeText(getApplicationContext(), serverResponse.getMessage(), Toast.LENGTH_SHORT).show();
 
+                            Intent intent = new Intent(UploadVideo.this, WaitingActivity.class);
+                            startActivity(intent);
                         }
                     }else {
                         //hidepDialog();
-                        Toast.makeText(getApplicationContext(), "problem uploading video", Toast.LENGTH_SHORT).show();
+                        System.out.println("!response.isSuccessful()");
+                        ServerResponse serverResponse = response.body();
+                        Log.v("Response gotten is", serverResponse.getMessage());
+                        Toast.makeText(getApplicationContext(), serverResponse.getMessage(), Toast.LENGTH_SHORT).show();
+
+                        Intent intent = new Intent(UploadVideo.this, WaitingActivity.class);
+                        startActivity(intent);
                     }
                 }
 
                 @Override
                 public void onFailure(Call<ServerResponse> call, Throwable t) {
                     //hidepDialog();
-                    Log.v("Response gotten is", t.getMessage());
-                    Toast.makeText(getApplicationContext(), "problem uploading video " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.v("(on failure)Response gotten is", t.getMessage());
+                    //Toast.makeText(getApplicationContext(), "problem uploading video " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(UploadVideo.this, WaitingActivity.class);
+                    startActivity(intent);
 
                 }
             });
@@ -281,13 +323,10 @@ public class UploadVideo extends AppCompatActivity {
         pDialog =  findViewById(R.id.progressbar);
         pDialog.setVisibility(View.INVISIBLE);
     }
-
-
     protected void showpDialog() {
 
         pDialog.setVisibility(View.VISIBLE);
     }
-
     protected void hidepDialog() {
 
         pDialog.setVisibility(View.INVISIBLE);

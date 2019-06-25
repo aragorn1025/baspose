@@ -20,7 +20,13 @@
         android:roundIcon="@mipmap/launch"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".UploadVideo"></activity>
+        <activity android:name=".ActivityUserProfile"></activity>
+        <activity android:name=".WaitingActivity" />
+        <activity android:name=".Login2Activity" />
+        <activity android:name=".ResultActivity" />
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".temp" />
+        <activity android:name=".UploadVideo" />
         <activity android:name=".LoadingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,9 +35,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
-        <activity android:name=".LoginActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".Class01" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
