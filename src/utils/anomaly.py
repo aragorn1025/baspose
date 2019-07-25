@@ -22,8 +22,7 @@ def fill_lose(original) :
             ct = 1
             for k in range(i,tmp):   
                 adjust[k] = pre + (ct)*d
-                ct+=1
-    
+                ct+=1    
     return adjust
 
 """去除幽靈骨架"""
@@ -34,8 +33,7 @@ def fill_lose(original) :
 def ghost(people, jf, main_role_x):
     temp= 0 
     near= 0    
-    for i in range(0, people):
-       
+    for i in range(0, people):       
         """點1的數據不可以出問題"""
         near= abs(average_x(jf['people'][0]['pose_keypoints_2d'])-main_role_x)         
         if abs(average_x(jf['people'][i]['pose_keypoints_2d'])-main_role_x )< near :          
@@ -45,12 +43,10 @@ def ghost(people, jf, main_role_x):
     #print(near) 
     return  jf['people'][temp]['pose_keypoints_2d']
 
-
 def ghost2(people, jf, main_role_x):
     temp= 0 
     near= 0    
-    for i in range(0, people):
-       
+    for i in range(0, people):       
         """點1的數據不可以出問題"""
         near= abs(average_x(jf['people'][0]['pose_keypoints_2d'])-main_role_x)         
         if abs(average_x(jf['people'][i]['pose_keypoints_2d'])-main_role_x )< near :          
