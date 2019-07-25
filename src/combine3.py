@@ -23,9 +23,9 @@ while 1 :
         openpose_output_path='/home/json_out/json'+ str(video_id)
         print(openpose_output_path)
         
-        os.chdir("/home/openpose")
+        os.chdir("../../openpose")
         os.system("./build/examples/openpose/openpose.bin --video " +video_path+ " --write_json "+openpose_output_path+ " --render_pose 0 --display 0 --hand")
-        os.chdir("/home/src")
+        os.chdir("../baspose/src")
         os.system("python3 test1.py")
         
 
