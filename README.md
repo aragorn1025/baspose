@@ -10,13 +10,16 @@
 * * *
 
 ## Installation
-    $ git clone https://github.com/aragorn1025/baspose.git
+    $ cd /home/
+	$ git clone https://github.com/aragorn1025/baspose.git
     $ cd baspose
 
 * * *
 
 ## Structure of Directory
-    - bashpose
+    /home
+	|- openpose
+	|- bashpose
        |- app             # android app
        |- db              # databse
        |- php             # source codes in lamp
