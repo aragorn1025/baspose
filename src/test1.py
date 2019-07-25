@@ -71,7 +71,6 @@ judge_comment_3= ''
 json_pre1=[] #前一個
 json_pre2=[] #前兩個
 
-
  #找手最高點的圖
 def hand_high(json, num):
     max_y= 0
@@ -95,13 +94,11 @@ def knee_low(json, num):
 def elbow_shoulder(shoulder, elbow, num) :
     elsh= 0
     for i in range(0, num-1):
-       if abs(shoulder[i]-elbow[i])<2 :
-           print(i)
-           elsh= i 
-           break
-       
-    return elsh
-            
+        if abs(shoulder[i]-elbow[i])<2 :
+            print(i)
+            elsh= i 
+            break       
+    return elsh            
       
 #右腳前左腳後    
 def judge_3(right, left, count):
@@ -124,129 +121,120 @@ def angle_plot(count) :
         
         angle=np.arccos(cos_angle)
         angle2=angle*360/2/np.pi
-        hand_angle.append(angle2)
-    
-    
+        hand_angle.append(angle2)       
     
 for file in files: 
-     if not os.path.isdir(file): 
-         with open(path+"/"+file , 'r') as reader:
-           data = reader.read()         
-           jf = json.loads(data)    
-           #計算共有幾個人
-           json_size= len(jf['people'])  
-           # main_role position_x
-           if json_size!= 0:
+    if not os.path.isdir(file): 
+        with open(path+"/"+file , 'r') as reader:
+            data = reader.read()         
+            jf = json.loads(data)    
+            #計算共有幾個人
+            json_size= len(jf['people'])  
+            # main_role position_x
+            if json_size!= 0:
                
              
-             if count==0 :  #第一筆資料，找最接近中心
+                if count==0 :  #第一筆資料，找最接近中心
                   
-                  json_people= ghost(json_size, jf, main_role_x)  
+                    json_people= ghost(json_size, jf, main_role_x)  
                   
-                  json_finger= ghost2(json_size, jf, main_role_x)  
+                    json_finger= ghost2(json_size, jf, main_role_x)  
                   
-                  #print(json_people)
-                  #print(json_finger)
-                  #json_f= np.asarray(json_f)
+                    #print(json_people)
+                    #print(json_finger)
+                    #json_f= np.asarray(json_f)
                   
-                  #json_finger= np.asarray(json_finger)
+                    #json_finger= np.asarray(json_finger)                  
                   
+                    #print(json_pre1)
+                    main_role_x=  json_people[1*3] 
                   
-                  #print(json_pre1)
-                  main_role_x=  json_people[1*3] 
+                    body_0_y.append(frame_height-json_people[1+3*0])
                   
-                  body_0_y.append(frame_height-json_people[1+3*0])
+                    body_2_y.append(frame_height-json_people[1+3*2])
                   
-                  body_2_y.append(frame_height-json_people[1+3*2])
+                    body_2_x.append(json_people[0+3*2])
                   
-                  body_2_x.append(json_people[0+3*2])
+                    body_3_y.append(frame_height-json_people[1+3*3])
                   
-                  body_3_y.append(frame_height-json_people[1+3*3])
-                  
-                  body_3_x.append(json_people[0+3*3])
+                    body_3_x.append(json_people[0+3*3])
         
-                  body_4_y.append(frame_height-json_people[1+3*4])
+                    body_4_y.append(frame_height-json_people[1+3*4])
                   
-                  body_4_x.append(json_people[0+3*4])
+                    body_4_x.append(json_people[0+3*4])
          
-                  body_6_y.append(frame_height-json_people[1+3*6])  
+                    body_6_y.append(frame_height-json_people[1+3*6])  
                   
-                  body_10_y.append(frame_height-json_people[1+3*10])  # Lknee
+                    body_10_y.append(frame_height-json_people[1+3*10])  # Lknee
                   
-                  body_13_y.append(frame_height-json_people[1+3*13])  # Rknee
+                    body_13_y.append(frame_height-json_people[1+3*13])  # Rknee
                   
-                  body_20_x.append(json_people[0+3*20])
+                    body_20_x.append(json_people[0+3*20])
                   
-                  body_23_x.append(json_people[1+3*23])
+                    body_23_x.append(json_people[1+3*23])
                  
-                  json_pre1= json_people
-                  json_pre2= json_people
-                  #print(main_role_x) 
+                    json_pre1= json_people
+                    json_pre2= json_people
+                    #print(main_role_x) 
                   
-                  finger_12_x.append(json_finger[1+3*12])
-                  finger_12_y.append(json_finger[3*12])
+                    finger_12_x.append(json_finger[1+3*12])
+                    finger_12_y.append(json_finger[3*12])
                   
-                  count+= 1
-                  
-           
+                    count+= 1                 
+                                            
+                else : #其他找最靠近main_role
                
+                    json_people= ghost(json_size, jf, main_role_x)  
                   
-             else : #其他找最靠近main_role
-               
-                  json_people= ghost(json_size, jf, main_role_x)  
+                    json_finger= ghost2(json_size, jf, main_role_x)  
                   
-                  json_finger= ghost2(json_size, jf, main_role_x)  
-                  
-                  #print(json_people)
-                  #print(json_finger)
+                    #print(json_people)
+                    #print(json_finger)
                                   
-                  body_0_y.append(frame_height-json_people[1+3*0])
+                    body_0_y.append(frame_height-json_people[1+3*0])
                   
-                  body_2_y.append(frame_height-json_people[1+3*2])
+                    body_2_y.append(frame_height-json_people[1+3*2])
                   
-                  body_2_x.append(json_people[0+3*2])
+                    body_2_x.append(json_people[0+3*2])
                   
-                  body_3_y.append(frame_height-json_people[1+3*3])
+                    body_3_y.append(frame_height-json_people[1+3*3])
                   
-                  body_3_x.append(json_people[0+3*3])
+                    body_3_x.append(json_people[0+3*3])
                   
-                  body_4_y.append(frame_height-json_people[1+3*4])
+                    body_4_y.append(frame_height-json_people[1+3*4])
                   
-                  body_4_x.append(json_people[0+3*4])
+                    body_4_x.append(json_people[0+3*4])
          
-                  body_6_y.append(frame_height-json_people[1+3*6])
+                    body_6_y.append(frame_height-json_people[1+3*6])
                   
-                  body_10_y.append(frame_height-json_people[1+3*10])
+                    body_10_y.append(frame_height-json_people[1+3*10])
                   
-                  body_13_y.append(frame_height-json_people[1+3*13])
+                    body_13_y.append(frame_height-json_people[1+3*13])
                   
-                  body_20_x.append(json_people[0+3*20])
+                    body_20_x.append(json_people[0+3*20])
                   
-                  body_23_x.append(json_people[1+3*23])
+                    body_23_x.append(json_people[1+3*23])
                   
-                  json_pre2= json_pre1
-                  json_pre1= json_people
+                    json_pre2= json_pre1
+                    json_pre1= json_people
                   
-                  finger_12_x.append(json_finger[1+3*12])
-                  finger_12_y.append(json_finger[3*12])
+                    finger_12_x.append(json_finger[1+3*12])
+                    finger_12_y.append(json_finger[3*12])
                                                                     
-                            #print(json_pre1)
-                  #print(json_pre2)
-                  #print(jf['people'][temp]['pose_keypoints_2d'][1*3])
+                    #print(json_pre1)
+                    #print(json_pre2)
+                    #print(jf['people'][temp]['pose_keypoints_2d'][1*3])
                   
-                  main_role_x=  (main_role_x+ json_people[1*3] )/2
-                  
+                    main_role_x=  (main_role_x+ json_people[1*3])/2                  
          
-                  count+=1       
-         
-           
+                    count+=1     
+                           
+                frame_count.append(count)
+                #for i in range(0, 24):
+                    #x.append(json_f[3*i])
           
-             frame_count.append(count)
-              #for i in range(0, 24):
-                #x.append(json_f[3*i])
-          
-              #for i in range(0, 24):
-                #y.append(json_f[1+ 3*i])    
+                #for i in range(0, 24):
+                    #y.append(json_f[1+ 3*i])    
 
 
 #judge={"judge1":["angle:",judge_angle_1, "judge:",judge_standard_1, "comment:", judge_comment_1 ] , 
@@ -311,21 +299,21 @@ angle1= float(judge_angle_1)
 angle2= float(judge_angle_2)
 
 if math.isnan(judge_angle_1) or  math.isnan(judge_angle_2) or judge_angle_1==0 or judge_angle_2== 0:
-   print("error")
-   error= 1
-   database_connect.error(video_id, error, new_video_path)
+    print("error")
+    error= 1
+    database_connect.error(video_id, error, new_video_path)
 
 
 else  :
-   error= 0
-   print("Not error")
-   angle1= float(judge_angle_1)
-   print(angle1)
-   angle2= float(judge_angle_2)
-   print(angle2)
-   database_connect.error(video_id, error, new_video_path)
-   database_connect.update_shoot_before(video_id, angle1, judge_standard_1, judge_comment_1, new_video_path, video_date)
-   database_connect.update_shoot_after(video_id, angle2, judge_standard_2, judge_comment_2, new_video_path, judge3, video_date)
+    error= 0
+    print("Not error")
+    angle1= float(judge_angle_1)
+    print(angle1)
+    angle2= float(judge_angle_2)
+    print(angle2)
+    database_connect.error(video_id, error, new_video_path)
+    database_connect.update_shoot_before(video_id, angle1, judge_standard_1, judge_comment_1, new_video_path, video_date)
+    database_connect.update_shoot_after(video_id, angle2, judge_standard_2, judge_comment_2, new_video_path, judge3, video_date)
    
 
 
