@@ -43,7 +43,22 @@ def ghost(people, jf, main_role_x):
             temp= i
     #print(jf['people'][temp]['pose_keypoints_2d'][1*6])
     #print(near) 
-    return  jf['people'][temp]
+    return  jf['people'][temp]['pose_keypoints_2d']
+
+
+def ghost2(people, jf, main_role_x):
+    temp= 0 
+    near= 0    
+    for i in range(0, people):
+       
+        """點1的數據不可以出問題"""
+        near= abs(average_x(jf['people'][0]['pose_keypoints_2d'])-main_role_x)         
+        if abs(average_x(jf['people'][i]['pose_keypoints_2d'])-main_role_x )< near :          
+            near= abs(average_x(jf['people'][i]['pose_keypoints_2d'])-main_role_x)
+            temp= i
+    #print(jf['people'][temp]['pose_keypoints_2d'][1*6])
+    #print(near) 
+    return  jf['people'][temp]['hand_right_keypoints_2d']
 
 """找人物節點的x平均"""
 def average_x(jf):

@@ -26,6 +26,6 @@ while 1 :
         os.chdir("/home/openpose")
         os.system("./build/examples/openpose/openpose.bin --video " +video_path+ " --write_json "+openpose_output_path+ " --render_pose 0 --display 0 --hand")
         os.chdir("/home/src")
-        os.system("python test1.py")
+        os.system("python3 test1.py")
         
 

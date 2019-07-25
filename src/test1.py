@@ -2,11 +2,11 @@
     
 import os
 import json
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import numpy as np
 import math
 import database_connect
-from utils.anomaly import ghost, fill_lose
+from utils.anomaly import ghost,ghost2, fill_lose
 from utils.judge import shoot_judge1, shoot_judge2, shoot_judge3
 #from line import openpose_output_path, video_date, video_id, new_video_path
 
@@ -141,11 +141,9 @@ for file in files:
              
              if count==0 :  #第一筆資料，找最接近中心
                   
-                  json_f= ghost(json_size, jf, main_role_x)  
+                  json_people= ghost(json_size, jf, main_role_x)  
                   
-                  json_people= json_f['pose_keypoints_2d']
-                  
-                  json_finger= json_f['hand_right_keypoints_2d']
+                  json_finger= ghost2(json_size, jf, main_role_x)  
                   
                   #print(json_people)
                   #print(json_finger)
@@ -195,11 +193,9 @@ for file in files:
                   
              else : #其他找最靠近main_role
                
-                  json_f= ghost(json_size, jf, main_role_x)      
+                  json_people= ghost(json_size, jf, main_role_x)  
                   
-                  json_people= json_f['pose_keypoints_2d']
-                  
-                  json_finger= json_f['hand_right_keypoints_2d']
+                  json_finger= ghost2(json_size, jf, main_role_x)  
                   
                   #print(json_people)
                   #print(json_finger)
