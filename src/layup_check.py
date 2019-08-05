@@ -290,7 +290,7 @@ body_11_y = fill_lose(body_11_y)
 body_14_y = fill_lose(body_14_y)
 
 index = body_8_y.index(max(body_8_y))
-if abs(body_10_y[index] - body_10_y[index-1]) > 200: # delete the outlier
+if abs(body_10_y[index] - body_10_y[index-1]) > 200: # remove outliers
     body_10_y[index] = 0
     max = max(body_10_y)
     index = body_10_y.index(max)+3
