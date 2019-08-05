@@ -25,6 +25,18 @@ def fill_lose(original) :
                 ct+=1    
     return adjust
 
+def fill_lost(body):
+    for i in range(0, 25):
+        body[i]['x']= fill_lose(body[i]['x'])
+        body[i]['y']= fill_lose(body[i]['y'])    
+    return body
+
+def fill_lost_finger(finger):
+    for i in range(0, 20):
+        finger[i]['x']= fill_lose(finger[i]['x'])
+        finger[i]['y']= fill_lose(finger[i]['y'])    
+    return finger 
+
 """去除幽靈骨架"""
 """ people:一個frame出現的骨架數
     jf: 一個frame所有骨架的節點資訊 
