@@ -1,7 +1,23 @@
+# -*- coding: utf-8 -*-
+    
 import os
 import json
+import matplotlib.pyplot as plt
 import numpy as np
+import math
+import database_connect_test
+#from anomaly import ghost, fill_lose
+#from judge import shoot_judge1, shoot_judge2, shoot_judge3
+#from line import openpose_output_path, video_date, video_id, new_video_path
 
+new_video_path, new_video_id, new_video_date= database_connect_test.new_video_id()
+video_path= '/home/data/uploads/'+ new_video_path
+video_date= new_video_date
+video_id= new_video_id
+openpose_output_path='/home/json_out/json'+ str(video_id)
+path = openpose_output_path
+files= os.listdir(path)
+files.sort()
 
 count = 0
 count_1 = 0
@@ -106,7 +122,7 @@ def check_first_step_1(jf):
         if body_14_x[i - 1] > body_11_x[i - 1] and body_14_x[i] > body_11_x[i] and body_14_x[i + 1] < body_11_x[
             i + 1] and body_14_x[i + 2] < body_11_x[i + 2] and j == 0:  # judge first step (Right)
             #print(sum[i], ':', 'First Step is right')
-            comment_1 = 'First step is correct!'
+            comment_1 = 1 # 1 : 第一步正確
             checker = True
             i += 1
             break
@@ -114,7 +130,7 @@ def check_first_step_1(jf):
         elif body_14_x[i - 1] < body_11_x[i - 1] and body_14_x[i] < body_11_x[i] and body_14_x[i + 1] > body_11_x[
             i + 1] and body_14_x[i + 2] > body_11_x[i + 2] and j == 0:
             #print(sum[i], ':', "Incorrect First Step")
-            comment_1 = 'First step is incorrect!'
+            comment_1 = 0 # 0 : 第一步錯誤
 
     for count_1 in range(count):
         if body_11_x[count_1] < body_14_x[count_1]:
@@ -132,7 +148,7 @@ def check_first_step_1(jf):
 
     if not bool(checker):
         #print("Incorrect First Step")
-        comment_1 = 'First step is incorrect!'
+        comment_1 = 0
 
     return comment_1 , i
 
@@ -153,10 +169,10 @@ def check_first_step_2(jf):
     avg = total / 10
 
     if abs(body_11_x[count_2] - body_11_x[0]) > avg+50:
-        comment_1 = 'First step is correct!'
+        comment_1 = 1
 
     else:
-        comment_1 = 'First step is incorrect!'
+        comment_1 = 0
 
 
     return comment_1 , count_2
@@ -167,7 +183,7 @@ def check_second_step(jf,i):
     for k in range(i+1,count):
         if body_14_x[k - 1] < body_11_x[k - 1] and body_14_x[k] < body_11_x[k] and body_14_x[k+ 1] > body_11_x[
             k + 1] and body_14_x[k + 2] > body_11_x[k + 2]:  # judge second step (Left)
-            comment_2 = 'Second Step is correct!'
+            comment_2 = 1
             break
 
 
@@ -185,11 +201,11 @@ def check_traveling(jf, k):
 
     for m in range(l, count):
         if body_11_y[l] > body_11_y[l + 1] and body_11_y[l] > body_11_y[l + 2] and body_11_y[l] > body_11_y[l + 3]:
-            comment_3 = 'You are traveling!'
+            comment_3 = 0 # 0 : traveling
 
 
         else:
-            comment_3 ='No traveling!'
+            comment_3 = 1 # 1 : no traveling
             break
 
     return comment_3
@@ -212,18 +228,16 @@ def check_arm(jf, index):
     judge_angle_2=angle*360/2/np.pi
 
     if 160 <= judge_angle_2 <= 180:
-        print('Perfect Finish')
+        comment_4 = 2 # 2 : perfect
 
     elif 140 <= judge_angle_2 < 160:
-        print('Good Finish')
+        comment_4 = 1 # 1 : good
 
     elif 120 <= judge_angle_2 < 140:
-        print('OK Finish')
+        comment_4 = 0 # 0 : ok
 
+    return comment_4
 
-path = "layup_travel"
-files = os.listdir(path)
-files.sort()
 
 for file in files:
     with open(path+"/"+file , 'r') as reader:
@@ -281,31 +295,14 @@ if abs(body_10_y[index] - body_10_y[index-1]) > 200: # delete the outlier
     max = max(body_10_y)
     index = body_10_y.index(max)+3
 
-if body_11_x[0] > body_14_x[0]:
-
-    comment_1 , i = check_first_step_2(jf)
-    print(comment_1)
-    if comment_1 == 'First step is incorrect!':
-        exit()
-
-    comment_2, k = check_second_step(jf,0)
-    print(comment_2)
-
-    comment_3 = check_traveling(jf,k)
-    print(comment_3)
-    if comment_3 == 'You are traveling!':
-        exit()
-
-    check_arm(jf, index)
-
-
 
 
 if body_11_x[0] < body_14_x[0]:
-
+    #print('左腳在前')
     comment_1, i = check_first_step_1(jf)
     print(comment_1)
-    if comment_1 == 'First step is incorrect!':
+    if comment_1 == 0:
+        database_connect_test.layup(video_id, comment_1, 11, 11)
         exit()
 
     comment_2, k = check_second_step(jf, i)
@@ -313,10 +310,34 @@ if body_11_x[0] < body_14_x[0]:
 
     comment_3 = check_traveling(jf, k)
     print(comment_3)
-    if comment_3 == 'You are traveling!':
+    if comment_3 == 0:
+        database_connect_test.layup(video_id, comment_1, comment_3, 11)
         exit()
 
-    check_arm(jf, index)
+    comment_4 = check_arm(jf, index)
+    database_connect_test.layup(video_id, comment_1, comment_3, comment_4)
+
+
+else:
+    #print('右腳在前')
+    comment_1 , i = check_first_step_2(jf)
+    print(comment_1)
+    if comment_1 == 0:
+        database_connect_test.layup(video_id, comment_1, 11, 11) # 11 : 代表前面錯誤就不判斷後面的動作
+        exit()
+
+    comment_2, k = check_second_step(jf,0)
+    print(comment_2)
+
+    comment_3 = check_traveling(jf,k)
+    print(comment_3)
+    if comment_3 == 0:
+        database_connect_test.layup(video_id, comment_1, comment_3, 11)
+        exit()
+
+    comment_4 = check_arm(jf, index)
+    database_connect_test.layup (video_id, comment_1, comment_3, comment_4)
 
 
 
+   
