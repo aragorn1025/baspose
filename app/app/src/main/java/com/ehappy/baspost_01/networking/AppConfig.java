@@ -13,7 +13,7 @@ public class AppConfig {
     //public static String BASE_URL = "http://192.168.1.162:8888/";
 
     //define the base url of our API.
-    public static String BASE_URL = "http://140.115.51.181:40130/";
+    public static String BASE_URL = "http://140.115.51.184:40130/";
 
     public static Retrofit getRetrofit() {
 

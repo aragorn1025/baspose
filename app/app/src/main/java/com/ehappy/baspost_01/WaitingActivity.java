@@ -29,8 +29,13 @@ import javax.xml.transform.Result;
 public class WaitingActivity extends AppCompatActivity {
 
     public static String filename;
+
     private ProgressBar loading;
     public int error = -1;
+
+
+    //which class i chose in Class01.java
+    public static int type;
 
 
     @Override
@@ -43,24 +48,61 @@ public class WaitingActivity extends AppCompatActivity {
         filename = UploadVideo.filename;
         System.out.println(filename);
 
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            public void run() {
+        //according to which class he chose, get relative judges
+        type = MainActivity.type;
+        System.out.println("which type?(0:shoot,1:layup_right) : "+type);
 
-                checkError(filename);
 
-                //error 0 : no error
-                if(error == 0)
-                {
-                    getjudge(filename);
 
-                }else if(error == 1)
-                {
-                    ErrorAction();
+//        Handler handlerE = new Handler();
+//        handlerE.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                checkError(filename);
+//                System.out.println("error : "+error);
+//            }
+//        },30000);
+
+
+//        if(error  == 0)
+//        {
+//            Handler handler = new Handler();
+////
+////            handler.postDelayed(new Runnable() {
+////                public void run() {
+////                    getjudge_shoot(filename);
+////
+////                }
+////            }, 15000);
+
+//        }else if(error == 1)
+//        {
+//
+//            ErrorAction();
+//        }
+
+        if(type == 0)
+        {
+            Handler handler = new Handler();
+
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    getjudge_shoot(filename);
+
                 }
+            }, 15000);
+        }
+        else if(type == 1)
+        {
+            Handler handler = new Handler();
 
-            }
-        }, 30000);   //5 seconds
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    getjudge_layup_right(filename);
+
+                }
+            }, 15000);
+        }
 
 
     }
@@ -68,7 +110,7 @@ public class WaitingActivity extends AppCompatActivity {
     private void ErrorAction()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(WaitingActivity.this);
-        builder.setMessage("Video incorrectly captured! Please capture one again.")
+        builder.setMessage("Video incorrectly captured! Please capture once again.")
                 .setNegativeButton("OK", null)
                 .create()
                 .show();
@@ -105,7 +147,7 @@ public class WaitingActivity extends AppCompatActivity {
 
     }
 
-    private void getjudge(final String filename) {
+    private void getjudge_shoot(final String filename) {
 
         loading.setVisibility(View.VISIBLE);
 
@@ -158,6 +200,55 @@ public class WaitingActivity extends AppCompatActivity {
         ResultRequest resultRequest = new ResultRequest(filename, responseListener);
         RequestQueue queue = Volley.newRequestQueue(WaitingActivity.this);
         queue.add(resultRequest);
+
+
+    }
+
+    private void getjudge_layup_right(final String filename) {
+
+        loading.setVisibility(View.VISIBLE);
+
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonResponse = new JSONObject(response);
+                    boolean success = jsonResponse.getBoolean("success");
+
+
+                    if (success) {
+
+                        loading.setVisibility(View.GONE);
+
+                        int step1 = jsonResponse.getInt("step1");
+                        int traveling = jsonResponse.getInt("traveling");
+                        int straight = jsonResponse.getInt("straight");
+                        String date = jsonResponse.getString("date");
+
+                        Intent intent = new Intent(WaitingActivity.this, ResultActivity2.class);
+                        intent.putExtra("step1", step1);
+                        intent.putExtra("traveling", traveling);
+                        intent.putExtra("straight", straight);
+                        intent.putExtra("date", date);
+                        WaitingActivity.this.startActivity(intent);
+
+                    } else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(WaitingActivity.this);
+                        builder.setMessage("Analyze Failed")
+                                .setNegativeButton("Retry", null)
+                                .create()
+                                .show();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        ResultRequest2 resultRequest2 = new ResultRequest2(filename, responseListener);
+        RequestQueue queue = Volley.newRequestQueue(WaitingActivity.this);
+        queue.add(resultRequest2);
 
 
     }

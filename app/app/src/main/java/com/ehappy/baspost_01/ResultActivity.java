@@ -45,10 +45,10 @@ public class ResultActivity extends AppCompatActivity {
         comment2tv = findViewById(R.id.comment2tv);
         wristtv = findViewById(R.id.wristtv);
 
+
         datetv.setText(date);
         angle1tv.setText(anglebefore+"");
         comment1tv.setText(commentbefore);
-
         angle2tv.setText(angleafter+"");
         comment2tv.setText(commentafter);
 

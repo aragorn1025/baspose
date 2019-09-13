@@ -22,7 +22,9 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.ehappy.baspost_01.networking.ApiConfig;
+import com.ehappy.baspost_01.networking.ApiConfig2;
 import com.ehappy.baspost_01.networking.AppConfig;
+import com.ehappy.baspost_01.networking.Classtype;
 import com.ehappy.baspost_01.networking.ServerResponse;
 
 import java.io.File;
@@ -30,14 +32,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import android.support.design.widget.NavigationView;
 import android.view.MenuItem;
 import com.andremion.floatingnavigationview.FloatingNavigationView;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 
 public class UploadVideo extends AppCompatActivity {
@@ -58,6 +65,9 @@ public class UploadVideo extends AppCompatActivity {
 
     public static String filename;
 
+    //which class i chose in Class01.java
+    public static int type;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +76,9 @@ public class UploadVideo extends AppCompatActivity {
 
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
+
+        type = MainActivity.type;
+        System.out.println(type);
 
         mFloatingNavigationView = (FloatingNavigationView) findViewById(R.id.floating_navigation_view);
         mFloatingNavigationView.setOnClickListener(new View.OnClickListener() {
@@ -125,6 +138,7 @@ public class UploadVideo extends AppCompatActivity {
                 Toast.makeText(UploadVideo.this,videoPath,Toast.LENGTH_LONG).show();
                 if(video!=null){
                     uploadFile(videoPath);
+                    uploadClass(type);
                 }else{
                     Toast.makeText(UploadVideo.this,"Please select a video",Toast.LENGTH_LONG).show();
                 }
@@ -255,6 +269,80 @@ public class UploadVideo extends AppCompatActivity {
         return path;
     }
 
+    private void uploadClass(int type){
+
+        System.out.println("uploadClass type is "+type);
+
+        OkHttpClient client = new OkHttpClient();
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://140.115.51.184:40130/")
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        ApiConfig2 service = retrofit.create(ApiConfig2.class);
+        Classtype classtype = new Classtype();
+        classtype.setType(type);
+
+        Call<Classtype> call = service.insertData(classtype.getType());
+
+        call.enqueue(new Callback<Classtype>() {
+            @Override
+            public void onResponse(Call<Classtype> call, Response<Classtype> response) {
+
+                Toast.makeText(UploadVideo.this, "response"+response, Toast.LENGTH_LONG).show();
+
+            }
+
+            @Override
+            public void onFailure(Call<Classtype> call, Throwable t) {
+
+
+                Log.i("Hello",""+t);
+                Toast.makeText(UploadVideo.this, "Throwable"+t, Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+//        ApiConfig2 getResponse2 = AppConfig.getRetrofit().create(ApiConfig2.class);
+//
+//        Call<ServerResponse> call2 = getResponse2.upload_class(type);
+//        call2.enqueue(new Callback<ServerResponse>() {
+//            @Override
+//            public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
+//                if (response.isSuccessful()) {
+//                    if (response.body() != null) {
+//                        //showpDialog();
+//                        ServerResponse serverResponse = response.body();
+//                        Toast.makeText(getApplicationContext(), serverResponse.getMessage(), Toast.LENGTH_SHORT).show();
+//
+//                    }
+//                } else {
+//                    //hidepDialog();
+//                    System.out.println("!response.isSuccessful()");
+//                    //ServerResponse serverResponse = response.body();
+//                    //Log.v("Response gotten is", serverResponse.getMessage());
+//                    //Toast.makeText(getApplicationContext(), serverResponse.getMessage(), Toast.LENGTH_SHORT).show();
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ServerResponse> call, Throwable t) {
+//
+//                //hidepDialog();
+//                Log.v("(on failure)Response gotten is", t.getMessage());
+//                //Toast.makeText(getApplicationContext(), "problem uploading video " + t.getMessage(), Toast.LENGTH_SHORT).show();
+//
+//            }
+//
+//        });
+    }
+
     //
     private void uploadFile(String videoPath) {
 
@@ -280,6 +368,7 @@ public class UploadVideo extends AppCompatActivity {
 
             ApiConfig getResponse = AppConfig.getRetrofit().create(ApiConfig.class);
             Call<ServerResponse> call = getResponse.upload("token", map);
+
             call.enqueue(new Callback<ServerResponse>() {
                 @Override
                 public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {

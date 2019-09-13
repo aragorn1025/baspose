@@ -21,6 +21,8 @@ public class Class01 extends AppCompatActivity {
 
     private Uri videoUri = null;
 
+    private Button capture,changeToUpload;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +30,10 @@ public class Class01 extends AppCompatActivity {
 
         final VideoView videov= findViewById(R.id.vclass01);
         MediaController mediaC = new MediaController(this);
+
+        capture = findViewById(R.id.btcorrect);
+        changeToUpload = findViewById(R.id.nextbt);
+
 
         String videopath = "android.resource://com.ehappy.baspost_01/"+R.raw.shooting;
         Uri uri = Uri.parse(videopath);
@@ -44,9 +50,26 @@ public class Class01 extends AppCompatActivity {
             videov.start();
         } });
 
+
+        capture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                captureVideo(v);
+            }
+        });
+
+        changeToUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeToUpload(v);
+            }
+        });
+
     }
 
     public void captureVideo(View view){
+
+        //Original
 
         Intent videoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
 
@@ -54,6 +77,15 @@ public class Class01 extends AppCompatActivity {
         {
             startActivityForResult(videoIntent,VIDEO_REQUEST_CODE);
         }
+
+        //CaptureVideoActivity
+//        Intent captureIntent = new Intent(Class01.this,CaptureVideoActivity.class);
+//        Class01.this.startActivity(captureIntent);
+
+
+//        Intent captureIntent = new Intent(Class01.this,Capture.class);
+//        Class01.this.startActivity(captureIntent);
+
 
     }
 
