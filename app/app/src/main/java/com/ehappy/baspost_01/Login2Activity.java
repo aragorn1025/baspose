@@ -1,12 +1,10 @@
 package com.ehappy.baspost_01;
 
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,7 +25,7 @@ import java.util.Map;
 
 public class Login2Activity extends AppCompatActivity {
 
-    private static String LOGIN_REQUEST_URL ="http://140.115.51.181:40130/login2.php";
+    private static String LOGIN_REQUEST_URL ="http://140.115.51.184:40130/login2.php";
 
     public static final String KEY_USERNAME="username";
     public static final String KEY_PASSWORD="password";
@@ -47,7 +45,7 @@ public class Login2Activity extends AppCompatActivity {
 
         edusername = findViewById(R.id.etUsername);
         edpassword = findViewById(R.id.etPassword);
-        forgot = findViewById(R.id.etForgot);
+        //forgot = findViewById(R.id.etForgot);
         register = findViewById(R.id.etRegister);
         btLogin = findViewById(R.id.btLogin);
         loading = findViewById(R.id.loading);

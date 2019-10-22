@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
 
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -19,6 +19,7 @@
         android:id="@+id/floating_navigation_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:backgroundTint="#055286"
         android:layout_margin="@dimen/fab_margin"
         app:drawMenuBelowFab="false"
         app:headerLayout="@layout/navigation_view_header"
@@ -27,4 +28,4 @@
         app:layout_anchorGravity="right|end"
         app:menu="@menu/navigation_view" />
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

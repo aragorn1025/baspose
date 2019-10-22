@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/result_shoot_fbg"
+    android:background="@drawable/resultshootbgnew"
     tools:context=".ResultActivity">
 
 
@@ -19,24 +19,26 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintHorizontal_bias="0.459"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.901">
+        app:layout_constraintVertical_bias="0.948">
 
         <TextView
             android:id="@+id/datetv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/marko_one"
             android:text="Date"
             android:textAlignment="center"
-            android:textSize="22sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/textView6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/arapey_italic"
             android:text="Before shooting:"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -59,6 +61,7 @@
             android:id="@+id/textView8"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/arapey_italic"
             android:text="After shooting:"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -88,16 +91,17 @@
 
     <Button
         android:id="@+id/button"
-        android:layout_width="81dp"
-        android:layout_height="76dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
 
-        android:background="@drawable/nextbt"
+        android:background="@drawable/resultnextbt"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.482"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.987" />
-</android.support.constraint.ConstraintLayout>
+        app:layout_constraintVertical_bias="0.988" />
+</androidx.constraintlayout.widget.ConstraintLayout>

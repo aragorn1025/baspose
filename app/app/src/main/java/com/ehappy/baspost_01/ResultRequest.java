@@ -9,7 +9,7 @@ import java.util.Map;
 public class ResultRequest extends StringRequest {
 
 
-//    //which class i chose in Class01.java
+//    //which class i chose in CaptureShootingActivity.java
 //    public static int type;
 //    //according to which class he chose, get relative judges
 //    type = MainActivity.type;

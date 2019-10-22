@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class ResultRequest2 extends StringRequest {
 
-    private static final String RESULT_REQUEST_URL = "http://140.115.51.184:40130/result_layup_test.php";
+    private static final String RESULT_REQUEST_URL = "http://140.115.51.184:40130/result_layup.php";
     private Map<String, String> params;
 
     public ResultRequest2(String filename, Response.Listener<String> listener) {

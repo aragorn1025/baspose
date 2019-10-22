@@ -1,7 +1,7 @@
 package com.ehappy.baspost_01;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -9,17 +9,12 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +31,7 @@ public class RegisterActivity extends AppCompatActivity {
     private ProgressBar loading;
     //private static String REGISTER_REQUEST_URL = "http://10.96.21.231/register2018.php";
     //private static String REGISTER_REQUEST_URL ="http://192.168.1.162:8888/register2018.php";
-    private static String REGISTER_REQUEST_URL ="http://140.115.51.181:40130/registerV2.php";
+    private static String REGISTER_REQUEST_URL ="http://140.115.51.184:40130/registerV2.php";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

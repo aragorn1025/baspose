@@ -1,6 +1,5 @@
 package com.ehappy.baspost_01;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.media.MediaPlayer;
@@ -8,10 +7,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -40,7 +39,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import android.support.design.widget.NavigationView;
+import com.google.android.material.navigation.NavigationView;
 import android.view.MenuItem;
 import com.andremion.floatingnavigationview.FloatingNavigationView;
 import com.google.gson.Gson;
@@ -65,7 +64,7 @@ public class UploadVideo extends AppCompatActivity {
 
     public static String filename;
 
-    //which class i chose in Class01.java
+    //which class chose in MainActivity.java
     public static int type;
 
 
@@ -138,7 +137,7 @@ public class UploadVideo extends AppCompatActivity {
                 Toast.makeText(UploadVideo.this,videoPath,Toast.LENGTH_LONG).show();
                 if(video!=null){
                     uploadFile(videoPath);
-                    uploadClass(type);
+                    //uploadClass(type);
                 }else{
                     Toast.makeText(UploadVideo.this,"Please select a video",Toast.LENGTH_LONG).show();
                 }
@@ -361,10 +360,10 @@ public class UploadVideo extends AppCompatActivity {
 
             // Parsing any Media type file
             RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), file);
-            map.put("file\"; filename=\"" + file.getName() + "\"", requestBody);
+            map.put("file\"; filename=\"" +type+ file.getName()  +"\"", requestBody);
 
             System.out.println("file.getName"+file.getName());
-            filename = file.getName();
+            filename = type+file.getName();
 
             ApiConfig getResponse = AppConfig.getRetrofit().create(ApiConfig.class);
             Call<ServerResponse> call = getResponse.upload("token", map);
@@ -396,7 +395,7 @@ public class UploadVideo extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<ServerResponse> call, Throwable t) {
                     //hidepDialog();
-                    Log.v("(on failure)Response gotten is", t.getMessage());
+                    Log.v("(on failure)Response is", t.getMessage());
                     //Toast.makeText(getApplicationContext(), "problem uploading video " + t.getMessage(), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(UploadVideo.this, WaitingActivity.class);
                     startActivity(intent);

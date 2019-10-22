@@ -2,29 +2,18 @@ package com.ehappy.baspost_01;
 
 import android.content.Intent;
 import android.os.Handler;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.xml.transform.Result;
 
 public class WaitingActivity extends AppCompatActivity {
 
@@ -34,7 +23,7 @@ public class WaitingActivity extends AppCompatActivity {
     public int error = -1;
 
 
-    //which class i chose in Class01.java
+    //which class i chose in CaptureShootingActivity.java
     public static int type;
 
 
@@ -88,9 +77,12 @@ public class WaitingActivity extends AppCompatActivity {
             handler.postDelayed(new Runnable() {
                 public void run() {
                     getjudge_shoot(filename);
+                    getjudge_mmg();
 
                 }
-            }, 15000);
+            }, 60000);
+
+
         }
         else if(type == 1)
         {
@@ -101,7 +93,7 @@ public class WaitingActivity extends AppCompatActivity {
                     getjudge_layup_right(filename);
 
                 }
-            }, 15000);
+            }, 60000);
         }
 
 
@@ -115,7 +107,7 @@ public class WaitingActivity extends AppCompatActivity {
                 .create()
                 .show();
 
-        Intent classIntent = new Intent(WaitingActivity.this,Class01.class);
+        Intent classIntent = new Intent(WaitingActivity.this, CaptureShootingActivity.class);
         WaitingActivity.this.startActivity(classIntent);
     }
 
@@ -145,6 +137,43 @@ public class WaitingActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(WaitingActivity.this);
         queue.add(errorRequest);
 
+    }
+
+    private void getjudge_mmg()
+    {
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonResponse = new JSONObject(response);
+                    boolean success = jsonResponse.getBoolean("success");
+
+                    if (success) {
+                        double mmg = jsonResponse.getDouble("mmg");
+                        String date = jsonResponse.getString("date");
+
+                        Intent intent = new Intent(WaitingActivity.this, ResultActivity_mmg.class);
+                        intent.putExtra("mmg", mmg);
+                        intent.putExtra("date", date);
+                        WaitingActivity.this.startActivity(intent);
+
+                    } else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(WaitingActivity.this);
+                        builder.setMessage("MMG Failed")
+                                .setNegativeButton("Retry", null)
+                                .create()
+                                .show();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        ResultRequest_mmg resultRequest_mmg = new ResultRequest_mmg(responseListener);
+        RequestQueue queue = Volley.newRequestQueue(WaitingActivity.this);
+        queue.add(resultRequest_mmg);
     }
 
     private void getjudge_shoot(final String filename) {
