@@ -19,9 +19,10 @@
 ## Structure of Directory
     /home
 	|- openpose
-	|- bashpose
+	|- BasPost
        |- app             # android app
        |- db              # databse
-       |- php             # source codes in lamp
-       |- src             # source codes in python
+       |- src             # python source codes
+       |- www             # php source codes for LAMP
+
 * * *

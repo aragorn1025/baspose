@@ -17,7 +17,7 @@
     mysqli_stmt_bind_param($statement2, "s", $filename);
     mysqli_stmt_execute($statement2);
     mysqli_stmt_store_result($statement2);
-    mysqli_stmt_bind_result($statement2, $id, $angle, $judge, $comment, $filename, $wrist, $date);
+    mysqli_stmt_bind_result($statement2, $id, $angle, $judge, $comment, $filename, $wrist, $date,$mmg);
 
 
     
